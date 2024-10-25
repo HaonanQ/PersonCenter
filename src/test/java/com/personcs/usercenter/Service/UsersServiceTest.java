@@ -6,27 +6,36 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UsersServiceTest {
     @Autowired
     private UsersService usersService;
 
     @Test
-    void get(){
-        Users user = new Users();
-        user.setId(0L);
-        user.setUsername("aaa");
-        user.setUserAccount("sdaf");
-        user.setAvatarUrl("sdfsdfsdf");
-        user.setGender(0);
-        user.setUserPassword("sdafsdfsdfsdf");
-        user.setPhone("asdf");
-        user.setEmail("sdfsdfsdf");
-        user.setUserStatus(0);
-        user.setCreateTime(new Date());
-        user.setUpdateTime(new Date());
-        user.setIsDelete(0);
-        System.out.println(user.getId());
+    void test(){
+        Users users = new Users();
+        users.setUsername("asd");
+        users.setUserAccount("asd");
+        users.setAvatarUrl("aaaa");
+        users.setGender(0);
+        users.setUserPassword("aaa");
+        users.setPhone("aaa");
+        users.setEmail("aaa");
+        users.setUserStatus(0);
+        users.setCreateTime(new Date());
+        users.setUpdateTime(new Date());
+        users.setIsDelete(0);
+        usersService.save(users);
+        System.out.println(users.getId());
+    }
+    @Test
+    void adduser(){
+        String username ="qhn!";
+        String password ="test12";
+        String checkpassword ="test123456";
+        System.out.println(usersService.registeruser(username,password,checkpassword));
 
     }
+
 }

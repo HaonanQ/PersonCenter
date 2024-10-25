@@ -1,9 +1,11 @@
 package com.personcs.usercenter;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@MapperScan("com.personcs.usercenter.Mapper")
 public class UserCenterApplication {
 
     public static void main(String[] args) {
