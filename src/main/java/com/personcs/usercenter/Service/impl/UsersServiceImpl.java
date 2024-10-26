@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.personcs.usercenter.Constant.UserConstant.USER_LOGIN_STATE;
 
 /**
 * @author Qiuhaonan
@@ -22,9 +25,11 @@ import java.util.regex.Pattern;
 @Service
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
     implements UsersService{
+
     @Autowired
     private UsersMapper usersMapper;
     private final String salt = "csuser";
+
     @Override
     public Long registeruser(String account, String password, String checkpassword) {
         if(StringUtils.isEmpty(account)|| StringUtils.isEmpty(password)|| StringUtils.isEmpty(checkpassword)){
@@ -62,7 +67,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         };
         return user.getId();
     }
-    public Users login(String account, String password ,HttpServletResponse response) {
+    public Users login(String account, String password , HttpServletRequest response) {
         //验证账号密码是否正确
         if(StringUtils.isEmpty(account)|| StringUtils.isEmpty(password)){
             return null;
@@ -73,20 +78,27 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         if (password.length() < 8){
             return null;
         }
+        String md5password = DigestUtils.md5DigestAsHex((password+salt).getBytes());
         QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount",account);
-        queryWrapper.eq("userPassword",password);
+        queryWrapper.eq("userPassword",md5password);
         Users user = usersMapper.selectOne(queryWrapper);
         if(user==null){
             return null;
         }
-        String md5password = DigestUtils.md5DigestAsHex((password+salt).getBytes());
-        if(!md5password.equals(user.getUserPassword())){
-            return null;
-        }
         //用户脱敏
         Users safeuser = new Users();
-        return null;
+        safeuser.setId(user.getId());
+        safeuser.setUserAccount(user.getUserAccount());
+        safeuser.setUsername(user.getUsername());
+        safeuser.setUserPassword(null);
+        safeuser.setEmail(user.getEmail());
+        safeuser.setAvatarUrl(user.getAvatarUrl());
+        safeuser.setUserStatus(user.getUserStatus());
+        safeuser.setCreateTime(user.getCreateTime());
+        //设置cookie
+        response.getSession().setAttribute(USER_LOGIN_STATE,safeuser);
+        return safeuser;
     }
 }
 
