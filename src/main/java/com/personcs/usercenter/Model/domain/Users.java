@@ -6,11 +6,6 @@ import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
-/**
- * 用户表
- * @TableName users
- */
-@TableName(value ="users")
 @Data
 public class Users implements Serializable {
     /**
@@ -74,6 +69,11 @@ public class Users implements Serializable {
      */
     @TableLogic
     private Integer isDelete;
+
+    /**
+     * 0-普通用户，1-管理员，2-超级管理员
+     */
+    private Integer userrole;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

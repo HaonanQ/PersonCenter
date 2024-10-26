@@ -1,17 +1,20 @@
 package com.personcs.usercenter.Controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.personcs.usercenter.Model.domain.Users;
 import com.personcs.usercenter.Model.domain.request.requestLoginUser;
 import com.personcs.usercenter.Model.domain.request.requestRegisterUser;
 import com.personcs.usercenter.Service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.personcs.usercenter.Constant.UserConstant.Admin;
+import static com.personcs.usercenter.Constant.UserConstant.USER_LOGIN_STATE;
 
 @RestController
 @RequestMapping("/user")
@@ -46,5 +49,33 @@ public class UserController {
             return null;
         }
         return usersService.login(useraccount, password, request);
+    }
+    @GetMapping("/search")
+    public List<Object> UserSearch(String username, HttpServletRequest request){
+        if(!isAdmin(request)){
+            return null;
+        }
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        if(username!=null){
+            queryWrapper.like("username", username);
+        }
+        List<Users> userlist = usersService.list(queryWrapper);
+        return userlist.stream().map(user -> usersService.getSafeUser(user)).collect(Collectors.toList());
+    }
+    @PostMapping("/delete")
+    public boolean UserDelete(@RequestBody Long id,HttpServletRequest request){
+        if(!isAdmin(request)){
+            return false;
+        }
+        if (id == null ||id <= 0){
+            return false;
+        }
+        return usersService.removeById(id);
+    }
+
+    private boolean isAdmin(HttpServletRequest request){
+        Object object = request.getSession().getAttribute(USER_LOGIN_STATE);
+        Users user = (Users) object;
+        return user != null && user.getUserrole() == Admin;
     }
 }

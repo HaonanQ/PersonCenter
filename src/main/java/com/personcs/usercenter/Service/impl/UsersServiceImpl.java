@@ -86,6 +86,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         if(user==null){
             return null;
         }
+        Users safeuser = getSafeUser(user);
+        //设置cookie
+        response.getSession().setAttribute(USER_LOGIN_STATE,safeuser);
+        return safeuser;
+    }
+
+    @Override
+    public Users getSafeUser(Users user) {
         //用户脱敏
         Users safeuser = new Users();
         safeuser.setId(user.getId());
@@ -96,8 +104,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         safeuser.setAvatarUrl(user.getAvatarUrl());
         safeuser.setUserStatus(user.getUserStatus());
         safeuser.setCreateTime(user.getCreateTime());
-        //设置cookie
-        response.getSession().setAttribute(USER_LOGIN_STATE,safeuser);
+        safeuser.setUserrole(user.getUserrole());
         return safeuser;
     }
 }

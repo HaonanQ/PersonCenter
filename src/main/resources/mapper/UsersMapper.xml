@@ -17,12 +17,14 @@
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+            <result property="userrole" column="userrole" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, username, userAccount,
-        avatarUrl, gender, userPassword,
-        phone, email, userStatus,
-        createTime, updateTime, isDelete
+        id,username,userAccount,
+        avatarUrl,gender,userPassword,
+        phone,email,userStatus,
+        createTime,updateTime,isDelete,
+        userrole
     </sql>
 </mapper>
