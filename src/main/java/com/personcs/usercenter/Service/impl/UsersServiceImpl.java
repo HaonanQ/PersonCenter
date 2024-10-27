@@ -94,6 +94,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
 
     @Override
     public Users getSafeUser(Users user) {
+        if(user==null){
+            return null;
+        }
         //用户脱敏
         Users safeuser = new Users();
         safeuser.setId(user.getId());

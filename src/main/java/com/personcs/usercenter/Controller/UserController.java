@@ -72,6 +72,18 @@ public class UserController {
         }
         return usersService.removeById(id);
     }
+    @GetMapping("/current")
+    public Users UserCurrent(HttpServletRequest request){
+        Object object = request.getSession().getAttribute(USER_LOGIN_STATE);
+        Users user = (Users) object;
+        if(user == null){
+            return null;
+        }
+        //todo : 完成用户是否封号
+        Long userId = user.getId();
+        Users newuser = usersService.getById(userId);
+        return usersService.getSafeUser(newuser);
+    }
 
     private boolean isAdmin(HttpServletRequest request){
         Object object = request.getSession().getAttribute(USER_LOGIN_STATE);
