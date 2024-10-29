@@ -31,10 +31,11 @@ public class UserController {
         String useraccount = requestRegisterUser.getUserAccount();
         String password = requestRegisterUser.getUserPassword();
         String checkpassword = requestRegisterUser.getCheckPassword();
-        if(useraccount == null || password == null || checkpassword == null){
+        String planetcode = requestRegisterUser.getPlanetCode();
+        if(useraccount == null || password == null || checkpassword == null || planetcode == null){
             return null;
         }
-        Long userId = usersService.registeruser(useraccount, password, checkpassword);
+        Long userId = usersService.registeruser(useraccount, password, checkpassword, planetcode);
         return userId;
     }
 
@@ -49,6 +50,20 @@ public class UserController {
             return null;
         }
         return usersService.login(useraccount, password, request);
+    }
+
+    /**
+     * 用户注销
+     * @param request
+     * @return
+     */
+    @PostMapping("/logout")
+    public Integer UserLogout(HttpServletRequest request){
+        if(request == null){
+            return null;
+        }
+        usersService.userlogout(request);
+        return 1;
     }
     @GetMapping("/search")
     public List<Object> UserSearch(String username, HttpServletRequest request){

@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 */
 public interface UsersService extends IService<Users> {
 
-    public Long registeruser(String account,String password,String checkpassword);
-    public Users login(String account, String password , HttpServletRequest response);
+    Long registeruser(String account, String password, String checkpassword, String planetcode);
+    Users login(String account, String password , HttpServletRequest response);
 
     Users getSafeUser(Users user);
+    Integer userlogout(HttpServletRequest request);
 }

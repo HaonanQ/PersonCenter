@@ -74,6 +74,10 @@ public class Users implements Serializable {
      * 0-普通用户，1-管理员，2-超级管理员
      */
     private Integer userrole;
+    /**
+     * 星球编码
+     */
+    private String planetCode;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
