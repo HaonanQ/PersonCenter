@@ -2,6 +2,7 @@ package com.personcs.usercenter.Service;
 
 import com.personcs.usercenter.Model.domain.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.personcs.usercenter.Respons.BaseResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 */
 public interface UsersService extends IService<Users> {
 
-    Long registeruser(String account, String password, String checkpassword, String planetcode);
-    Users login(String account, String password , HttpServletRequest response);
+    BaseResponse<Long> registeruser(String account, String password, String checkpassword);
+    BaseResponse<Users> login(String account, String password , HttpServletRequest response);
 
     Users getSafeUser(Users user);
     Integer userlogout(HttpServletRequest request);
